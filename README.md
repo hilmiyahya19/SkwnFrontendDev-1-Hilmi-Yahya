@@ -1,75 +1,221 @@
-# React + TypeScript + Vite
+```markdown
+# 🪑 SkwnFrontendDev-1-Hilmi-Yahya  
+**Furniture Landing Page** — dibuat menggunakan **React + TypeScript + Vite** dengan integrasi **MockAPI** sebagai sumber data produk furniture.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## 🚀 Deskripsi Proyek
+Proyek ini merupakan implementasi mockup **Furniture Landing Page** menggunakan **CSS (Tailwind)** dan **React + TypeScript**.  
+Data produk diambil dari **MockAPI** untuk menampilkan daftar produk furniture secara dinamis.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Proyek ini dikembangkan sebagai bagian dari **Tes Frontend Developer - Skwn**.
 
-## React Compiler
+---
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 🧩 Teknologi yang Digunakan
+- ⚛️ **React 18 + TypeScript**
+- ⚡ **Vite**
+- 🎨 **Tailwind CSS**
+- 🌀 **Swiper.js** (untuk carousel produk)
+- 🌐 **Axios** (untuk HTTP request)
+- 🧱 **MockAPI.io** (sebagai REST API data furniture)
+- 💻 **ESLint + Prettier** (linting & formatting)
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📦 Struktur Folder
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+src/
+├─ components/          → Komponen UI seperti Navbar, Footer
+├─ sections/            → Bagian halaman seperti OurProducts, Hero, About, dll
+├─ lib/
+│   └─ api/
+│       └─ productApi.ts → File untuk fetch data dari MockAPI
+├─ assets/              → Gambar & ikon
+├─ App.tsx
+├─ main.tsx
+├─ vite-env.d.ts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+````
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 🌐 MockAPI Setup
+
+### 1️⃣ Buat Akun MockAPI
+1. Buka [https://mockapi.io/](https://mockapi.io/)
+2. Login / daftar akun.
+3. Buat **project baru**, beri nama misalnya `Furniture API`.
+4. Klik **“Add Resource”**, lalu buat resource bernama `products` dengan field seperti:
+   - `name` → (string)
+   - `price` → (string)
+   - `image` → (string / URL dari Cloudinary atau Imgur)
+   - `category` → (optional, string)
+
+### 2️⃣ Isi Data Awal
+Tambahkan beberapa data furniture contoh, misalnya:
+```json
+{
+  "id": "1",
+  "name": "Wooden Table",
+  "price": "$299",
+  "image": "https://res.cloudinary.com/.../wooden-table.jpg"
+}
+````
+
+### 3️⃣ Salin Endpoint Base URL
+
+Misalnya kamu dapat URL:
+
 ```
+https://672e7fa5229a881691f3.mockapi.io/api
+```
+
+Tambahkan ke file `.env` di root proyek:
+
+```
+VITE_API_BASE_URL=https://672e7fa5229a881691f3.mockapi.io/api
+```
+
+---
+
+## ⚙️ Konfigurasi API di Frontend
+
+Buat file:
+`src/lib/api/productApi.ts`
+
+```ts
+import axios from "axios"
+
+export interface Product {
+  id: string
+  name: string
+  price: string
+  image: string
+  category?: string
+}
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+})
+
+export const getProducts = async (): Promise<Product[]> => {
+  try {
+    const res = await api.get("/products")
+    return res.data
+  } catch (error) {
+    console.error("Error fetching products:", error)
+    return []
+  }
+}
+```
+
+Pastikan kamu sudah punya file `vite-env.d.ts`:
+
+```ts
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+```
+
+---
+
+## 🧠 Implementasi di Halaman
+
+Panggil API menggunakan hook di section seperti `OurProducts.tsx`:
+
+```tsx
+import { useEffect, useState } from "react"
+import { getProducts, Product } from "../lib/api/productApi"
+
+export default function OurProducts() {
+  const [products, setProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getProducts()
+      setProducts(data)
+    }
+    fetchData()
+  }, [])
+
+  return (
+    <section>
+      <h2>Our Products</h2>
+      <div className="grid md:grid-cols-3 gap-6">
+        {products.map((item) => (
+          <div key={item.id} className="p-4 bg-gray-100 rounded-lg">
+            <img src={item.image} alt={item.name} className="w-full h-64 object-cover rounded-md" />
+            <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
+            <p className="text-sm text-gray-700">{item.price}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+```
+
+---
+
+## 🧰 How to Start Project
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/hilmiyahya19/SkwnFrontendDev-1-Hilmi-Yahya.git
+cd SkwnFrontendDev-1-Hilmi-Yahya
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Tambahkan File `.env`
+
+Isi dengan endpoint MockAPI kamu:
+
+```
+VITE_API_BASE_URL=https://<endpoint>.mockapi.io/api
+```
+
+### 4️⃣ Jalankan Project
+
+```bash
+npm run dev
+```
+
+### 5️⃣ Build untuk Produksi
+
+```bash
+npm run build
+```
+
+---
+
+## 🧑‍💻 Deployment
+
+Kamu bisa upload hasil build ke hosting gratis seperti:
+
+* [Netlify](https://www.netlify.com/)
+* [Vercel](https://vercel.com/)
+* [Render](https://render.com/)
+
+Langkah umum:
+
+1. Build project → `npm run build`
+2. Upload folder `dist` ke Netlify/Vercel
+3. Pastikan halaman berjalan di link online
+
+---
+
+## 📜 Lisensi
+
+MIT License © 2025 — *Hilmi Yahya*
