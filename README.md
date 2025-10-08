@@ -1,7 +1,7 @@
 # 🪑 SkwnFrontendDev-1-Hilmi-Yahya  
 **Furniture Landing Page** — dibuat menggunakan **React + TypeScript + Vite** dengan integrasi **MockAPI** sebagai sumber data produk furniture.
 
-🌐 Lihat Website Live di Sini → dekoor-hilmi-yahya.vercel.app
+🌐 Lihat Website Live di Sini → [https://dekoor-hilmi-yahya.vercel.app](https://dekoor-hilmi-yahya.vercel.app)
 
 ---
 
