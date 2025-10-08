@@ -7,7 +7,7 @@
 Proyek ini merupakan implementasi mockup **Furniture Landing Page** menggunakan **CSS (Tailwind)** dan **React + TypeScript**.  
 Data produk diambil dari **MockAPI** untuk menampilkan daftar produk furniture secara dinamis.
 
-Proyek ini dikembangkan sebagai bagian dari **Tes Frontend Developer - Skwn**.
+Proyek ini dikembangkan sebagai bagian dari **Tes Frontend Developer - Sekawan Media**.
 
 ---
 
@@ -26,15 +26,16 @@ Proyek ini dikembangkan sebagai bagian dari **Tes Frontend Developer - Skwn**.
 ```
 
 src/
+├─ assets/              → Gambar & ikon
 ├─ components/          → Komponen UI seperti Navbar, Footer
-├─ sections/            → Bagian halaman seperti OurProducts, Hero, About, dll
+├─ layout/            
 ├─ lib/
 │   └─ api/
 │       └─ productApi.ts → File untuk fetch data dari MockAPI
-├─ assets/              → Gambar & ikon
+├─ pages/  
+├─ types/        
 ├─ App.tsx
 ├─ main.tsx
-├─ vite-env.d.ts
 
 ````
 
@@ -85,41 +86,28 @@ Buat file:
 `src/lib/api/productApi.ts`
 
 ```ts
-import axios from "axios"
-
-export interface Product {
-  id: string
-  name: string
-  price: string
-  image: string
-  category?: string
-}
+import axios from "axios";
+import type { Product } from "../../types/product"; 
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-})
+});
 
-export const getProducts = async (): Promise<Product[]> => {
+export const getProducts = async () => {
   try {
-    const res = await api.get("/products")
-    return res.data
+    const res = await api.get<Product[]>("/products");
+    return res.data;
   } catch (error) {
-    console.error("Error fetching products:", error)
-    return []
+    console.error("Error fetching products:", error);
+    return [];
   }
-}
+};
 ```
 
 Pastikan kamu sudah punya file `vite-env.d.ts`:
 
 ```ts
-interface ImportMetaEnv {
-  readonly VITE_API_BASE_URL: string
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv
-}
+/// <reference types="vite/client" />
 ```
 
 ---
