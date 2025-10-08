@@ -1,4 +1,3 @@
-```markdown
 # 🪑 SkwnFrontendDev-1-Hilmi-Yahya  
 **Furniture Landing Page** — dibuat menggunakan **React + TypeScript + Vite** dengan integrasi **MockAPI** sebagai sumber data produk furniture.
 
